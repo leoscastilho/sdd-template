@@ -1,0 +1,15 @@
+# Reusable baseline if your project adopts Docker. Review for each build context.
+.git
+node_modules
+**/node_modules
+**/__pycache__
+**/.venv
+**/coverage
+**/*.log
+.env
+.env.*
+**/*.pem
+**/*.key
+.claude/state
+specs/__generated__
+reports/security

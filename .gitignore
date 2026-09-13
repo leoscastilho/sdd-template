@@ -1,0 +1,47 @@
+# Dependencies and build output
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.der
+id_rsa*
+id_ed25519*
+*credentials*.json
+!*.example
+
+# Local databases
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Generated output
+**/__generated__/
+
+# Optional design-tool working state
+.impeccable/live/
+.impeccable/review/
+.impeccable/build/
+.impeccable/mocks/
+
+# Local agent/editor state
+.claude/state/
+.claude/settings.local.json
+.claude/launch.json
+.DS_Store
+*.log
+
+# Security reports can contain sensitive findings; keep them local.
+reports/security/*
+!reports/security/.gitkeep

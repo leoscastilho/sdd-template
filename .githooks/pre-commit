@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Installed by `make setup` (core.hooksPath=.githooks). Same checks the agent's Stop hook runs, on the staged set.
+set -e
+root="$(git rev-parse --show-toplevel)"
+"$root/scripts/spec/lint.sh" >/dev/null || { "$root/scripts/spec/lint.sh"; echo "pre-commit: spec lint failed"; exit 1; }
+"$root/scripts/spec/drift.sh" --staged || { echo; echo "pre-commit: spec drift. Update the governing spec(s)."; exit 1; }
+"$root/scripts/security/quick-scan.sh" --staged || { echo; echo "pre-commit: security quick-scan found known-flaw patterns. Fix them or mark a verified false positive with 'security-scan:allow <reason>'."; exit 1; }
