@@ -1,49 +1,37 @@
-# Stack-neutral SDD tools. Add application commands after recording your stack decisions.
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
-.PHONY: help setup check test lint spec-lint spec-index spec-drift spec-audit spec-dashboard security-scan security-report
+.PHONY: help setup spec-lint spec-index spec-drift spec-audit spec-dashboard security-scan
 
-help: ## Show available commands
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+help: ## Show available checks
+	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-16s %s\n", $$1, $$2}'
 
-setup: ## Check tool prerequisites and install local Git hooks (no app dependencies)
-	@for tool in git node bash; do command -v $$tool >/dev/null || { echo "missing prerequisite: $$tool"; exit 1; }; done
-	@node -e 'if (+process.versions.node.split(".")[0] < 18) { console.error("Node 18 or newer is required"); process.exit(1); }'
-	git config core.hooksPath .githooks
-	@echo "ok: Git hooks installed; no application stack selected"
-	@command -v jq >/dev/null || echo "optional: install jq to use the Claude Code hooks"
+setup: ## Install the local hook and check required tools
+	@git config core.hooksPath .githooks
+	@command -v bash >/dev/null || { echo "bash is required"; exit 1; }
+	@command -v git >/dev/null || { echo "git is required"; exit 1; }
+	@command -v make >/dev/null || { echo "make is required"; exit 1; }
+	@command -v node >/dev/null || echo "note: node is needed for the dashboard"
+	@echo "ok: SDD checks are ready"
 
-check: lint spec-drift spec-audit test ## Validate the starter and run tooling regression tests
+spec-lint: ## Validate spec frontmatter and references
+	@scripts/spec/lint.sh
 
-lint: spec-lint security-scan ## Validate specs and scan for common security patterns
+spec-index: ## Regenerate the spec catalog
+	@scripts/spec/index.sh > specs/INDEX.md
+	@echo "wrote specs/INDEX.md"
 
-test: ## Run isolated tooling fixture tests (no application dependencies)
-	node --test scripts/test/tooling.test.mjs
+spec-drift: ## Check changed code has an updated governing spec
+	@scripts/spec/drift.sh
 
-spec-lint: ## Validate spec frontmatter, ids and references
-	scripts/spec/lint.sh
+spec-audit: ## Find unclaimed code and dangling implements globs
+	@scripts/spec/audit.sh
 
-spec-index: ## Regenerate specs/INDEX.md from frontmatter
-	@mkdir -p specs
-	@scripts/spec/index.sh > specs/INDEX.md && echo "wrote specs/INDEX.md"
-
-spec-drift: ## Report code changes not reflected in their governing specs
-	scripts/spec/drift.sh
-
-spec-audit: ## Audit traceability, missing implementations and spec validity
-	scripts/spec/audit.sh
-
-spec-dashboard: spec-lint ## Render a local HTML dashboard; NO_OPEN=1 skips opening
+spec-dashboard: ## Render the local spec dashboard (NO_OPEN=1 skips opening)
 	@mkdir -p specs/__generated__
-	@node scripts/spec/dashboard.mjs > specs/__generated__/dashboard.html && echo "wrote specs/__generated__/dashboard.html"
+	@node scripts/spec/dashboard.mjs > specs/__generated__/dashboard.html
 	@if [ -z "$$NO_OPEN" ] && command -v open >/dev/null 2>&1; then open specs/__generated__/dashboard.html; fi
 
-security-scan: ## Run heuristic checks; use the security-audit skill for a full review
-	scripts/security/quick-scan.sh --all
+security-scan: ## Run the heuristic security scan
+	@scripts/security/quick-scan.sh --all
 
-security-report: ## Open the newest local audit report; NO_OPEN=1 skips opening
-	@f="$$(ls -t reports/security/*.html 2>/dev/null | head -1)"; \
-	if [ -z "$$f" ]; then echo "no report yet — run the security-audit skill"; exit 1; fi; \
-	echo "$$f"; \
-	if [ -z "$$NO_OPEN" ] && command -v open >/dev/null 2>&1; then open "$$f"; fi

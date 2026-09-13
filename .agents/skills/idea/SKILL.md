@@ -15,7 +15,7 @@ This may be run from a phone, with the input **dictated** rather than typed. **K
 
 Input may come from keyboard dictation or a pasted voice transcript. Expect the input to be spoken prose: rambling, thin on punctuation, and rough on identifiers.
 
-- **Repair identifiers silently when the intent is obvious** — "see eff pee", "laudo", "tectonic", "A D R three", "eff document editor" mean CFP, laudo, Tectonic, ADR-0003, F-DOCUMENT-EDITOR. Do not make the user spell things.
+- **Repair identifiers silently when the intent is obvious** — resolve shorthand to the identifiers already present in this project's specs. Do not invent domain terms or make the user spell things.
 - **Ask only when a misheard word changes the meaning**, not to tidy up phrasing. One short question, then move on.
 - **Never ask for a slug to be dictated.** Derive it from the feature name and state it once: "writing this to `docs$ideas/waitlist.md`".
 - Long, unstructured answers are normal — the user is thinking aloud. Pull the structure out yourself rather than asking them to organise it.

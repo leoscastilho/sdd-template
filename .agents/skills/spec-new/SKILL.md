@@ -10,7 +10,7 @@ description: Draft a new feature, architecture or contract spec from the templat
 2. Copy `specs/02-features/_template.md` (or the closest existing spec of that type) and fill every section. Delete sections that truly do not apply; never leave template text.
 3. Id: prefix `F-`, `ARCH-`, `C-`, `P-` plus SCREAMING-KEBAB. Check uniqueness with `make spec-lint`.
 4. Mine the existing corpus first: `specs/01-architecture/system-overview.md` probably already says something about this area. Cite the section. Do not contradict an accepted ADR.
-5. Acceptance criteria are Given/When/Then and independently testable. Include empty, loading and error states for anything user-facing, and the validation rule (from `cfpdoc.cls` / the registry) for anything that touches a document type.
+5. Acceptance criteria are Given/When/Then and independently testable. Include empty, loading and error states for anything user-facing, plus validation rules from the governing architecture or contract specs.
 6. Write **Ruled out** with reasons. This is what stops a future session from re-adding a rejected idea.
 7. Every unresolved point goes in the spec's **Open questions** AND as a new `### Q` entry in `specs/OPEN-QUESTIONS.md` with a recommendation.
 8. Leave `status: draft`. Run `make spec-lint && make spec-index`. Tell the user what they need to decide to reach `approved`.

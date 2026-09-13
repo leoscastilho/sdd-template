@@ -4,7 +4,7 @@ title: Example feature
 type: feature
 status: draft
 implements:
-  - apps/api/src/example/**
+  - src/example/**
 depends_on: []
 decisions: []
 last_reviewed: 2026-09-12

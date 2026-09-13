@@ -11,7 +11,7 @@ You (the orchestrator) are turning one approved spec into working, tested code. 
 1. The target spec. Refuse if `status` is `draft`: tell the user what is missing to reach `approved`.
 2. Every id in its `depends_on` and `decisions`. ADRs constrain you; "Ruled out" sections are hard constraints.
 3. `specs/OPEN-QUESTIONS.md`. If any question lists this spec under **Blocks**, stop and ask the user to `/decide` first.
-4. The contracts under `specs/03-contracts/` this spec names (OpenAPI, WebSocket messages, LaTeX render API, document-type registry). If the spec needs a shape the contracts lack, add it to the contract first; the code on both sides is written against it (nothing is generated in v1).
+4. The contracts under `specs/03-contracts/` this spec names. If the spec needs a shape the contracts lack, add it to the contract first; the code on both sides is written against it.
 5. `specs/ROADMAP.md`. Confirm this spec belongs to the current or an earlier milestone. If it does not, say so and ask.
 
 ## 2. Plan
@@ -23,7 +23,7 @@ Write a short plan in the conversation: files to create (each must fall under an
 - Presentational files only (React components that render already-loaded data, CSS, tokens, static screens) go to `ui-coder` with the exact file list **and the surface brief path** under `.impeccable/surfaces/` (plus `DESIGN.md` when it exists); anything holding WebSocket, store, API, draft persistence, validation or render logic, every test, and every migration stays with `coder`.
 - You do not write application code under `apps/`, `packages/`, `services/` or `infra/` yourself. A trivial follow-up (a typo, a one-line rename) is fine; anything larger goes back to the coder with a precise brief.
 - Read every coder report. Its "spec discoveries" are yours to write into the spec now, not later.
-- Review the diff (`git diff`) yourself before verifying: db only via Prisma, LaTeX only via `renderTex` and the render service, user text escaped before LaTeX, ws adapter not socket.io, no ruled-out option reintroduced, no secrets in tracked files.
+- Review the diff yourself before verifying: preserve the chosen architecture, validate untrusted input, avoid unsafe execution, do not reintroduce ruled-out options, and keep secrets out of tracked files.
 
 ## 4. Verify (all four gates)
 - Tests: launch `test-runner` with the test, typecheck, `make spec-lint`, `make spec-drift` and `make security-scan` commands plus the criteria list; act on its failure lines and coverage table. Every acceptance criterion must map to a passing test; list the mapping.

@@ -14,7 +14,7 @@ Procedure:
 2. Locate the code via the spec's `implements:` globs. Read it.
 3. For every acceptance criterion: find the test that covers it (tests are named after criteria). Report covered / partial / missing, with file:line.
 4. For every "Ruled out" item in the spec and its ADRs: grep for evidence it was reintroduced (SDK imports, config, patterns). Report violations.
-5. Check the architecture invariants in CLAUDE.md that apply (db only via Prisma, LaTeX only via `renderTex` + the render service, user text escaped before LaTeX, ws adapter not socket.io, no migrations at startup, drafts stored as ciphertext, structured logs with no field values or tex, no secrets in tracked files).
+5. Check the architecture invariants in CLAUDE.md that apply: the implementation follows the chosen architecture, validates untrusted input, protects authorization boundaries, avoids unsafe rendering and execution, and keeps secrets and sensitive values out of tracked files and logs.
 6. Note anything the code does that the spec does not mention. That is spec drift and must be written back into the spec.
 
 Output, in this order: criteria table (criterion → test name → file:line → covered/partial/missing), suspected violations (each with the ruled-out item quoted and the evidence line), spec-drift items, nits, and a one-line proposed verdict. The orchestrator decides; do not soften evidence to fit a verdict. Cite file:line everywhere.
