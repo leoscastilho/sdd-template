@@ -37,11 +37,12 @@ decisions to each project.
 
 ## Create your own repository
 
-Clone this template, move into the new folder, remove the template's remote,
-and create your own first commit:
+The template repository is [`git@github.com:leoscastilho/sdd-template.git`](git@github.com:leoscastilho/sdd-template.git).
+Clone it, move into the new folder, remove the template's remote, and create
+your own first commit:
 
 ```sh
-git clone <template-url> my-project
+git clone git@github.com:leoscastilho/sdd-template.git my-project
 cd my-project
 git remote remove origin
 git init
@@ -49,7 +50,10 @@ git add .
 git commit -m "Initialize project from SDD Kickstart"
 ```
 
-Create an empty repository on your Git host, then connect and push it:
+While logged in to GitHub, create an empty repository at
+[https://github.com/new](https://github.com/new). Do not initialize it with a
+README, license, or `.gitignore`; this template already has its own files.
+Then connect and push it:
 
 ```sh
 git remote add origin <your-new-repository-url>
